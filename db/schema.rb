@@ -20,9 +20,10 @@ ActiveRecord::Schema.define(version: 2019_08_08_083628) do
     t.decimal "total_price", precision: 12, scale: 3
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["order_id"], name: "index_order_items_on_order_id"
-    t.index ["product_id"], name: "index_order_items_on_product_id"
   end
+
+  add_index "order_items", ["order_id"], name: "index_order_items_on_order_id"
+  add_index "order_items", ["product_id"], name: "index_order_items_on_product_id"
 
   create_table "order_statuses", force: :cascade do |t|
     t.string "name"
@@ -38,9 +39,10 @@ ActiveRecord::Schema.define(version: 2019_08_08_083628) do
     t.integer "order_status_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["order_status_id"], name: "index_orders_on_order_status_id"
   end
 
+  add_index "orders", ["order_status_id"], name: "index_orders_on_order_status_id"
+  
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.decimal "price", precision: 12, scale: 3
