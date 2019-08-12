@@ -15,3 +15,10 @@ OrderStatus.create! id: 1, name: "In Progress"
 OrderStatus.create! id: 2, name: "Placed"
 OrderStatus.create! id: 3, name: "Shipped"
 OrderStatus.create! id: 4, name: "Cancelled"
+
+Order.delete_all
+Order.create! id: 1, subtotal: 0.50, tax: 0.20, shipping: 0.40, total: 1.10, order_status_id: 1
+
+OrderItem.delete_all
+OrderItem.create! id: 1, product_id: 1, order_id: 1, unit_price: 0.2, quantity: 1, total_price: 3.2
+

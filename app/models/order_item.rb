@@ -1,41 +1,34 @@
 class OrderItem < ApplicationRecord
   belongs_to :product
   belongs_to :order
-  validates :quantity, presence: true, numericality: {only_integer: true, greater_than: 0}
+  validates :quantity, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validate :product_present
   validate :order_present
 
   before_save :finalize
-  
+
   def unit_price
-    if persisted
-      self[:unit_price]
-    else
-      product.price
-    end
+    self[:unit_price] if persisted?
+    product.price
   end
 
   def total_price
-    unit_price * quantity
+    unit_price.to_f * quantity if unit_price.nil?
   end
 
-  private
-    def order_present
-      if order.nil?
-        errors.add(:order, "is not valid order.")
-      end
-    end
+private
+  def product_present
+    errors.add(:product, "is not valid or is not active.") if product.nil?
+  end
 
-    def product_present
-      if product.nil?
-        errors.add(:product, "is not valid order.")
-      end
-    end
-    def set_order_status
-      self.status_id = 1
-    end
-    def finalize
+  def order_present
+      errors.add(:order, "is not a valid order.") if order.nil?
+  end
+
+  def finalize
+    if unit_price.nil?
       self[:unit_price] = unit_price
       self[:total_price] = quantity * self[:unit_price]
-    end
+    end 
+  end
 end
